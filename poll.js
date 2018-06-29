@@ -279,13 +279,13 @@ function checkAppointmentResult(name, schedule) {
   return function(str) {
     var $ = cheerio.load(str);
 
-    var dateString = $('#ApptForm')
-                         .parent()
-                         .parent()
-                         .parent()
-                         .find('tr:nth-child(3) .alert')
-                         .text()
-                         .replace(' at ', ' ');
+    var dateString = $("td[data-title='Appointment']")
+                        .text()
+                        // .split('on:')[1]
+                        // .replace(" at "," ")
+                        .replace(/^\s*\n/gm, "")
+
+    
     console.log(name + ':\t' + dateString);
     if (!dateString) {
       displayErrors($);
@@ -309,7 +309,7 @@ function checkAppointmentResult(name, schedule) {
       if (withinDays && isDayOfWeek && withinTime && schedule[day].allowed) {
         if (!found[dateString + name]) {
           found[dateString + name] = true;
-          console.log('FOUND NEW MATCH! \x07 \n');
+          // console.log('FOUND NEW MATCH! \x07 \n');
 
           if (settings.textOnFind) {
             text.send(
